@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Valentine?</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main class="card">
+    <h1 class="title">will you be my valentine</h1>
+
+    <div class="btn-row">
+      <button id="yesBtn" class="btn primary big-focus" type="button">Yes</button>
+      <button id="noBtn" class="btn ghost" type="button">no</button>
+    </div>
+
+    <p id="hint" class="hint" aria-live="polite"></p>
+  </main>
+
+  <div class="bg-hearts" aria-hidden="true"></div>
+
+  <script>
+    const yesBtn = document.getElementById("yesBtn");
+    const noBtn  = document.getElementById("noBtn");
+    const hint   = document.getElementById("hint");
+
+    let scale = 1;
+    let loopTimer = null;
+
+    function startYesGrowthLoop() {
+      if (loopTimer) return; // already looping
+
+      hint.textContent = "Nice try 😄";
+
+      loopTimer = setInterval(() => {
+        scale += 0.12; // growth step
+        yesBtn.style.transform = `scale(${scale})`;
+
+        // Keep it from getting absurd: reset after it gets huge
+        if (scale >= 2.6) {
+          scale = 1.15;
+          yesBtn.style.transform = `scale(${scale})`;
+        }
+      }, 220);
+    }
+
+    noBtn.addEventListener("click", () => {
+      // kick it up a little immediately
+      scale = Math.max(scale + 0.2, 1.2);
+      yesBtn.style.transform = `scale(${scale})`;
+
+      // then run the loop
+      startYesGrowthLoop();
+    });
+
+    yesBtn.addEventListener("click", () => {
+      if (loopTimer) clearInterval(loopTimer);
+      loopTimer = null;
+
+      // Simple "success" moment — you can change this to anything
+      document.querySelector(".card").innerHTML = `
+        <h1 class="title">YAY!! 💖</h1>
+        <p class="subtitle">Best decision ever. I love you.</p>
+        <a class="btn primary" href="index.html">go back</a>
+      `;
+    });
+  </script>
+</body>
+</html>
