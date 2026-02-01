@@ -20,51 +20,60 @@
 
   <div class="bg-hearts" aria-hidden="true"></div>
 
-  <script>
-    const yesBtn = document.getElementById("yesBtn");
-    const noBtn  = document.getElementById("noBtn");
-    const hint   = document.getElementById("hint");
+<script>
+  const yesBtn = document.getElementById("yesBtn");
+  const noBtn  = document.getElementById("noBtn");
+  const hint   = document.getElementById("hint");
 
-    let scale = 1;
-    let loopTimer = null;
+  let scale = 1;
+  let loopTimer = null;
 
-    function startYesGrowthLoop() {
-      if (loopTimer) return; // already looping
+  function startYesGrowthLoop() {
+    if (loopTimer) return;
 
-      hint.textContent = "Nice try 😄";
+    hint.textContent = "That answer isn’t accepted 😌";
 
-      loopTimer = setInterval(() => {
-        scale += 0.12; // growth step
-        yesBtn.style.transform = `scale(${scale})`;
-
-        // Keep it from getting absurd: reset after it gets huge
-        if (scale >= 2.6) {
-          scale = 1.15;
-          yesBtn.style.transform = `scale(${scale})`;
-        }
-      }, 220);
-    }
-
-    noBtn.addEventListener("click", () => {
-      // kick it up a little immediately
-      scale = Math.max(scale + 0.2, 1.2);
+    loopTimer = setInterval(() => {
+      scale += 0.12;
       yesBtn.style.transform = `scale(${scale})`;
 
-      // then run the loop
-      startYesGrowthLoop();
-    });
+      if (scale >= 2.6) {
+        scale = 1.2;
+        yesBtn.style.transform = `scale(${scale})`;
+      }
+    }, 220);
+  }
 
-    yesBtn.addEventListener("click", () => {
-      if (loopTimer) clearInterval(loopTimer);
-      loopTimer = null;
+  noBtn.addEventListener("click", () => {
+    scale = Math.max(scale + 0.2, 1.2);
+    yesBtn.style.transform = `scale(${scale})`;
+    startYesGrowthLoop();
+  });
 
-      // Simple "success" moment — you can change this to anything
-      document.querySelector(".card").innerHTML = `
-        <h1 class="title">YAY!! 💖</h1>
-        <p class="subtitle">Best decision ever. I love you.</p>
-        <a class="btn primary" href="index.html">go back</a>
-      `;
-    });
-  </script>
+  function confettiBurst() {
+    for (let i = 0; i < 120; i++) {
+      const confetti = document.createElement("div");
+      confetti.className = "confetti";
+      confetti.style.left = Math.random() * 100 + "vw";
+      confetti.style.backgroundColor =
+        ["#ff5fa2", "#ffd1e6", "#ffffff"][Math.floor(Math.random()*3)];
+      confetti.style.animationDuration =
+        Math.random() * 2 + 2 + "s";
+      document.body.appendChild(confetti);
+
+      setTimeout(() => confetti.remove(), 4000);
+    }
+  }
+
+  yesBtn.addEventListener("click", () => {
+    if (loopTimer) clearInterval(loopTimer);
+    confettiBurst();
+
+    document.querySelector(".card").innerHTML = `
+      <h1 class="title">YES!!! 💖</h1>
+      <p class="subtitle">I can’t wait to spend Valentine’s Day with you 🥰</p>
+    `;
+  });
+</script>
 </body>
 </html>
