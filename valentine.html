@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Valentine?</title>
+  <link rel="stylesheet" href="styles.css?v=1" />
+</head>
+<body>
+  <div class="page">
+    <main class="card" id="card">
+      <div class="badge">💌</div>
+      <h1 class="title lowercase">will you be my valentine</h1>
+
+      <div class="btn-row">
+        <button class="btn primary" id="yesBtn" type="button">Yes</button>
+        <button class="btn ghost" id="noBtn" type="button">no</button>
+      </div>
+
+      <p class="hint" id="hint" aria-live="polite"></p>
+    </main>
+
+    <div class="soft-hearts" aria-hidden="true"></div>
+  </div>
+
+  <script>
+    const yesBtn = document.getElementById("yesBtn");
+    const noBtn = document.getElementById("noBtn");
+    const hint = document.getElementById("hint");
+    const card = document.getElementById("card");
+
+    let scale = 1;
+    let loopId = null;
+
+    function startYesLoop() {
+      if (loopId) return;
+      hint.textContent = "That option isn’t available 😌";
+
+      loopId = setInterval(() => {
+        scale += 0.12;
+        yesBtn.style.transform = `scale(${scale})`;
+
+        // reset before it becomes ridiculous
+        if (scale >= 2.8) {
+          scale = 1.15;
+          yesBtn.style.transform = `scale(${scale})`;
+        }
+      }, 220);
+    }
+
+    noBtn.addEventListener("click", () => {
+      // immediate bump, then loop
+      scale = Math.max(scale + 0.25, 1.2);
+      yesBtn.style.transform = `scale(${scale})`;
+      startYesLoop();
+    });
+
+    function confettiBurst() {
+      const colors = ["#ff4fa3", "#ff86c8", "#ffd1ea", "#ffffff"];
+      const total = 140;
+
+      for (let i = 0; i < total; i++) {
+        const piece = document.createElement("div");
+        piece.className = "confetti";
+        piece.style.left = Math.random() * 100 + "vw";
+        piece.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+        piece.style.transform = `rotate(${Math.random() * 360}deg)`;
+        piece.style.animationDuration = (Math.random() * 1.6 + 2.2) + "s";
+        piece.style.opacity = (Math.random() * 0.4 + 0.6);
+
+        // vary size a bit
+        const size = Math.random() * 6 + 6;
+        piece.style.width = size + "px";
+        piece.style.height = (size * 0.6) + "px";
+
+        document.body.appendChild(piece);
+        setTimeout(() => piece.remove(), 4500);
+      }
+    }
+
+    yesBtn.addEventListener("click", () => {
+      if (loopId) clearInterval(loopId);
+      loopId = null;
+
+      confettiBurst();
+
+      card.innerHTML = `
+        <div class="badge">💖</div>
+        <h1 class="title">YES!!!</h1>
+        <p class="subtitle">Happy Valentine’s Day, my love 🥰</p>
+        <a class="btn primary" href="index.html">back to the first page</a>
+      `;
+    });
+  </script>
+</body>
+</html>
